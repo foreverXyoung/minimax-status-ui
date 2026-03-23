@@ -154,4 +154,8 @@ MIT License - See [LICENSE](LICENSE) file for details.
 
 ## Author
 
-Jochen Yang
+[foreverXyoung](https://github.com/foreverXyoung)
+
+## Acknowledgments
+
+Based on [minimax-status](https://github.com/JochenYang/minimax-status) by Jochen Yang.
