@@ -15,21 +15,7 @@ Web Dashboard for monitoring MiniMax Token-Plan usage with multi-account support
 
 ## Screenshots
 
-```
-┌─────────────────────────────────────────────────────┐
-│  MiniMax Dashboard              [+ Add Account]    │
-│  Token-Plan Monitor                    [Refresh]    │
-├─────────────────────────────────────────────────────┤
-│  ┌─────────────────┐  ┌─────────────────┐          │
-│  │ My Account      │  │ Work Account    │          │
-│  │ MiniMax-M2      │  │ MiniMax-M2.5    │          │
-│  │ Usage ████░░ 45%│  │ Usage ██████ 72%│          │
-│  │ Remaining 2475  │  │ Remaining 1260  │          │
-│  │ Reset 3h 20m    │  │ Reset 1h 45m    │          │
-│  │ Expires 15 days │  │ Expires 15 days │          │
-│  └─────────────────┘  └─────────────────┘          │
-└─────────────────────────────────────────────────────┘
-```
+![Dashboard Preview](src/public/screenshot.png)
 
 ## Requirements
 
