@@ -14,7 +14,11 @@ function applyTheme(theme) {
   if (theme === 'system') {
     theme = getSystemTheme();
   }
-  document.body.setAttribute('data-theme', theme === 'dark' ? 'dark' : '');
+  if (theme === 'gradient') {
+    document.body.removeAttribute('data-theme');
+  } else {
+    document.body.setAttribute('data-theme', theme);
+  }
 }
 
 const i18n = {
