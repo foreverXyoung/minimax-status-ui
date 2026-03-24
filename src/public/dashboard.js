@@ -2,6 +2,7 @@ const API_BASE = '/api';
 let accounts = [];
 let refreshInterval = 30000;
 let refreshTimer = null;
+let isAutoRefresh = true;
 
 async function fetchAccounts() {
   const res = await fetch(`${API_BASE}/accounts`);
@@ -18,9 +19,28 @@ async function fetchSettings() {
   try {
     const res = await fetch(`${API_BASE}/settings`);
     const settings = await res.json();
-    refreshInterval = (settings.refreshInterval || 30) * 1000;
+    const interval = settings.refreshInterval || 30;
+    refreshInterval = interval * 1000;
+    isAutoRefresh = interval > 0;
+
+    const select = document.getElementById('refreshIntervalSelect');
+    if (select) {
+      select.value = interval.toString();
+    }
   } catch (e) {
     console.error('Failed to fetch settings:', e);
+  }
+}
+
+async function saveRefreshInterval(interval) {
+  try {
+    await fetch(`${API_BASE}/settings`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refreshInterval: interval })
+    });
+  } catch (e) {
+    console.error('Failed to save settings:', e);
   }
 }
 
@@ -176,14 +196,31 @@ async function loadDashboard() {
   await fetchAccounts();
   await refreshAllAccounts();
 
-  if (refreshTimer) clearInterval(refreshTimer);
-  refreshTimer = setInterval(refreshAllAccounts, refreshInterval);
+  setupAutoRefresh();
+}
+
+function setupAutoRefresh() {
+  if (refreshTimer) {
+    clearInterval(refreshTimer);
+    refreshTimer = null;
+  }
+
+  if (isAutoRefresh && refreshInterval > 0) {
+    refreshTimer = setInterval(refreshAllAccounts, refreshInterval);
+  }
 }
 
 // Init
 document.getElementById('addAccountBtn').addEventListener('click', openModal);
 document.getElementById('refreshBtn').addEventListener('click', refreshAllAccounts);
 document.getElementById('addAccountForm').addEventListener('submit', handleAddAccount);
+document.getElementById('refreshIntervalSelect').addEventListener('change', async (e) => {
+  const interval = parseInt(e.target.value, 10);
+  refreshInterval = interval * 1000;
+  isAutoRefresh = interval > 0;
+  await saveRefreshInterval(interval);
+  setupAutoRefresh();
+});
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 document.getElementById('addModal').addEventListener('click', e => { if (e.target.id === 'addModal') closeModal(); });
