@@ -78,7 +78,7 @@ class MinimaxAPI {
     }
   }
 
-  parseUsageData(apiData, subscriptionData) {
+  parseUsageData(apiData, subscriptionData, lang = 'zh-CN') {
     if (!apiData.model_remains || apiData.model_remains.length === 0) {
       throw new Error('No usage data available');
     }
@@ -102,6 +102,32 @@ class MinimaxAPI {
     const weeklyDays = Math.floor(weeklyRemainingMs / (1000 * 60 * 60 * 24));
     const weeklyHours = Math.floor((weeklyRemainingMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 
+    const i18nText = {
+      'zh-CN': {
+        reset: (h, m) => h > 0 ? `${h} 小时 ${m} 分钟后重置` : `${m} 分钟后重置`,
+        weeklyReset: (d, h) => d > 0 ? `${d} 天 ${h} 小时后重置` : `${h} 小时后重置`,
+        expiryRemaining: (d) => `还剩 ${d} 天`,
+        expiryToday: '今天到期',
+        expiryExpired: (d) => `已过期 ${d} 天`
+      },
+      'zh-TW': {
+        reset: (h, m) => h > 0 ? `${h} 小時 ${m} 分鐘後重置` : `${m} 分鐘後重置`,
+        weeklyReset: (d, h) => d > 0 ? `${d} 天 ${h} 小時後重置` : `${h} 小時後重置`,
+        expiryRemaining: (d) => `還剩 ${d} 天`,
+        expiryToday: '今天到期',
+        expiryExpired: (d) => `已過期 ${d} 天`
+      },
+      'en': {
+        reset: (h, m) => h > 0 ? `Reset in ${h}h ${m}m` : `Reset in ${m}m`,
+        weeklyReset: (d, h) => d > 0 ? `Reset in ${d}d ${h}h` : `Reset in ${h}h`,
+        expiryRemaining: (d) => `${d} days remaining`,
+        expiryToday: 'Expires today',
+        expiryExpired: (d) => `Expired ${d} days ago`
+      }
+    };
+
+    const txt = i18nText[lang] || i18nText['en'];
+
     let expiryInfo = null;
     if (subscriptionData?.current_subscribe?.current_subscribe_end_time) {
       const expiryDate = subscriptionData.current_subscribe.current_subscribe_end_time;
@@ -113,18 +139,18 @@ class MinimaxAPI {
       expiryInfo = {
         date: expiryDate,
         daysRemaining: daysDiff,
-        text: daysDiff > 0 ? `还剩 ${daysDiff} 天` : daysDiff === 0 ? '今天到期' : `已过期 ${Math.abs(daysDiff)} 天`
+        text: daysDiff > 0 ? txt.expiryRemaining(daysDiff) : daysDiff === 0 ? txt.expiryToday : txt.expiryExpired(Math.abs(daysDiff))
       };
     }
 
     return {
       modelName: modelData.model_name,
       timeWindow: {
-        start: startTime.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Shanghai', hour12: false }),
-        end: endTime.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Shanghai', hour12: false }),
+        start: startTime.toLocaleTimeString(lang === 'en' ? 'en-US' : 'zh-CN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Shanghai', hour12: false }),
+        end: endTime.toLocaleTimeString(lang === 'en' ? 'en-US' : 'zh-CN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Shanghai', hour12: false }),
         timezone: 'UTC+8'
       },
-      remaining: { hours, minutes, text: hours > 0 ? `${hours} 小时 ${minutes} 分钟后重置` : `${minutes} 分钟后重置` },
+      remaining: { hours, minutes, text: txt.reset(hours, minutes) },
       usage: { used: usedCount, remaining: remainingCount, total: modelData.current_interval_total_count, percentage: usedPercentage },
       weekly: {
         used: weeklyUsed,
@@ -133,7 +159,7 @@ class MinimaxAPI {
         days: weeklyDays,
         hours: weeklyHours,
         unlimited: weeklyTotal === 0,
-        text: weeklyDays > 0 ? `${weeklyDays} 天 ${weeklyHours} 小时后重置` : `${weeklyHours} 小时后重置`
+        text: txt.weeklyReset(weeklyDays, weeklyHours)
       },
       expiry: expiryInfo
     };
