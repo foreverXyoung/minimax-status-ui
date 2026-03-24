@@ -4,6 +4,18 @@ let refreshInterval = 30000;
 let refreshTimer = null;
 let isAutoRefresh = true;
 let currentLang = 'zh-CN';
+let currentTheme = 'gradient';
+
+function getSystemTheme() {
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+function applyTheme(theme) {
+  if (theme === 'system') {
+    theme = getSystemTheme();
+  }
+  document.body.setAttribute('data-theme', theme === 'dark' ? 'dark' : '');
+}
 
 const i18n = {
   'zh-CN': {
@@ -117,6 +129,7 @@ async function fetchSettings() {
     refreshInterval = interval * 1000;
     isAutoRefresh = interval > 0;
     currentLang = settings.language || 'zh-CN';
+    currentTheme = settings.theme || 'gradient';
 
     const refreshSelect = document.getElementById('refreshIntervalSelect');
     if (refreshSelect) refreshSelect.value = interval.toString();
@@ -124,6 +137,10 @@ async function fetchSettings() {
     const langSelect = document.getElementById('languageSelect');
     if (langSelect) langSelect.value = currentLang;
 
+    const themeSelect = document.getElementById('themeSelect');
+    if (themeSelect) themeSelect.value = currentTheme;
+
+    applyTheme(currentTheme);
     applyI18n();
   } catch (e) {
     console.error('Failed to fetch settings:', e);
@@ -320,15 +337,20 @@ document.getElementById('refreshIntervalSelect').addEventListener('change', asyn
   const interval = parseInt(e.target.value, 10);
   refreshInterval = interval * 1000;
   isAutoRefresh = interval > 0;
-  await saveSettings({ refreshInterval: interval, language: currentLang });
+  await saveSettings({ refreshInterval: interval, language: currentLang, theme: currentTheme });
   setupAutoRefresh();
 });
 document.getElementById('languageSelect').addEventListener('change', async (e) => {
   currentLang = e.target.value;
-  await saveSettings({ refreshInterval: parseInt(document.getElementById('refreshIntervalSelect').value, 10), language: currentLang });
+  await saveSettings({ refreshInterval: parseInt(document.getElementById('refreshIntervalSelect').value, 10), language: currentLang, theme: currentTheme });
   applyI18n();
   await fetchAccounts();
   await refreshAllAccounts();
+});
+document.getElementById('themeSelect').addEventListener('change', async (e) => {
+  currentTheme = e.target.value;
+  applyTheme(currentTheme);
+  await saveSettings({ refreshInterval: parseInt(document.getElementById('refreshIntervalSelect').value, 10), language: currentLang, theme: currentTheme });
 });
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });

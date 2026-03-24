@@ -4,11 +4,90 @@
   padding: 0;
 }
 
+/* Theme Variables */
+:root {
+  --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --bg-secondary: rgba(255, 255, 255, 0.95);
+  --text-primary: #333;
+  --text-secondary: #555;
+  --text-muted: #888;
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --card-border: transparent;
+  --card-shadow: rgba(0, 0, 0, 0.1);
+  --header-bg: rgba(255, 255, 255, 0.95);
+  --header-shadow: rgba(0, 0, 0, 0.1);
+  --input-border: #e0e0e0;
+  --input-bg: white;
+  --select-border: #e0e0e0;
+  --select-bg: white;
+  --last-update-color: rgba(255, 255, 255, 0.8);
+  --progress-bg: #eee;
+  --detail-border: #f0f0f0;
+  --badge-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --logo-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --btn-primary-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --btn-secondary-bg: #f0f0f0;
+  --btn-secondary-color: #555;
+}
+
+/* Light Theme */
+[data-theme="light"] {
+  --bg-primary: #f0f2f5;
+  --bg-secondary: white;
+  --text-primary: #333;
+  --text-secondary: #555;
+  --text-muted: #888;
+  --card-bg: white;
+  --card-border: #e0e0e0;
+  --card-shadow: rgba(0, 0, 0, 0.08);
+  --header-bg: white;
+  --header-shadow: rgba(0, 0, 0, 0.08);
+  --input-border: #e0e0e0;
+  --input-bg: white;
+  --select-border: #e0e0e0;
+  --select-bg: white;
+  --last-update-color: #999;
+  --progress-bg: #e0e0e0;
+  --detail-border: #f0f0f0;
+  --badge-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --logo-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --btn-primary-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --btn-secondary-bg: #f0f0f0;
+  --btn-secondary-color: #555;
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+  --bg-primary: #1a1a2e;
+  --bg-secondary: #16213e;
+  --text-primary: #e0e0e0;
+  --text-secondary: #b0b0b0;
+  --text-muted: #808080;
+  --card-bg: #1e2a4a;
+  --card-border: #2a3f5f;
+  --card-shadow: rgba(0, 0, 0, 0.3);
+  --header-bg: #1e2a4a;
+  --header-shadow: rgba(0, 0, 0, 0.3);
+  --input-border: #3a4f6f;
+  --input-bg: #0f1629;
+  --select-border: #3a4f6f;
+  --select-bg: #1e2a4a;
+  --last-update-color: #808080;
+  --progress-bg: #3a4f6f;
+  --detail-border: #2a3f5f;
+  --badge-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --logo-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --btn-primary-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --btn-secondary-bg: #2a3f5f;
+  --btn-secondary-color: #e0e0e0;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--bg-primary);
   min-height: 100vh;
-  color: #333;
+  color: var(--text-primary);
+  transition: background 0.3s, color 0.3s;
 }
 
 .container {
@@ -23,15 +102,16 @@ header {
   align-items: center;
   margin-bottom: 32px;
   padding: 24px;
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--header-bg);
   border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px var(--header-shadow);
+  transition: background 0.3s, box-shadow 0.3s;
 }
 
 .logo h1 {
   font-size: 28px;
   font-weight: 700;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--logo-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -40,13 +120,14 @@ header {
 .logo .subtitle {
   display: block;
   font-size: 13px;
-  color: #888;
+  color: var(--text-muted);
   margin-top: 4px;
 }
 
 .header-actions {
   display: flex;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
 .btn-primary, .btn-secondary {
@@ -60,7 +141,7 @@ header {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--btn-primary-bg);
   color: white;
 }
 
@@ -70,24 +151,24 @@ header {
 }
 
 .btn-secondary {
-  background: #f0f0f0;
-  color: #555;
+  background: var(--btn-secondary-bg);
+  color: var(--btn-secondary-color);
 }
 
 .btn-secondary:hover {
-  background: #e0e0e0;
+  filter: brightness(0.95);
 }
 
 .refresh-select {
   padding: 10px 16px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--select-border);
   border-radius: 10px;
-  background: white;
+  background: var(--select-bg);
   font-size: 14px;
   font-weight: 500;
-  color: #555;
+  color: var(--text-secondary);
   cursor: pointer;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, background 0.3s, color 0.3s;
 }
 
 .refresh-select:hover {
@@ -106,16 +187,17 @@ header {
 }
 
 .account-card {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--card-bg);
   border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px var(--card-shadow);
+  border: 1px solid var(--card-border);
   overflow: hidden;
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition: transform 0.3s, box-shadow 0.3s, background 0.3s, border-color 0.3s;
 }
 
 .account-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 16px 48px var(--card-shadow);
 }
 
 .account-card.error {
@@ -124,7 +206,7 @@ header {
 
 .card-header {
   padding: 20px 24px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--detail-border);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -133,11 +215,11 @@ header {
 .card-header h3 {
   font-size: 18px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--text-primary);
 }
 
 .default-badge {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--badge-primary);
   color: white;
   padding: 4px 12px;
   border-radius: 20px;
@@ -150,7 +232,7 @@ header {
   border: none;
   font-size: 24px;
   cursor: pointer;
-  color: #ccc;
+  color: var(--text-muted);
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -171,7 +253,7 @@ header {
 
 .model-name {
   font-size: 14px;
-  color: #888;
+  color: var(--text-muted);
   margin-bottom: 20px;
   font-weight: 500;
 }
@@ -188,7 +270,7 @@ header {
 }
 
 .progress-label {
-  color: #666;
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
@@ -199,7 +281,7 @@ header {
 
 .progress-bar {
   height: 12px;
-  background: #eee;
+  background: var(--progress-bg);
   border-radius: 6px;
   overflow: hidden;
 }
@@ -219,7 +301,7 @@ header {
   flex-direction: column;
   gap: 14px;
   padding-top: 20px;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--detail-border);
 }
 
 .detail-row {
@@ -230,12 +312,12 @@ header {
 }
 
 .detail-row span:first-child {
-  color: #888;
+  color: var(--text-muted);
 }
 
 .detail-row span:last-child {
   font-weight: 600;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .weekly-badge {
@@ -272,9 +354,9 @@ header {
 .empty-state {
   text-align: center;
   padding: 80px 20px;
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--card-bg);
   border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px var(--card-shadow);
 }
 
 .empty-state.hidden { display: none; }
@@ -286,19 +368,19 @@ header {
 
 .empty-state p {
   font-size: 18px;
-  color: #555;
+  color: var(--text-secondary);
   margin-bottom: 8px;
 }
 
 .empty-state .hint {
   font-size: 14px;
-  color: #999;
+  color: var(--text-muted);
 }
 
 .last-update {
   text-align: center;
   margin-top: 24px;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--last-update-color);
   font-size: 13px;
 }
 
@@ -320,7 +402,7 @@ header {
 .modal.hidden { display: none; }
 
 .modal-content {
-  background: white;
+  background: var(--card-bg);
   padding: 32px;
   border-radius: 24px;
   width: 440px;
@@ -331,7 +413,7 @@ header {
 .modal-content h2 {
   margin-bottom: 24px;
   font-size: 22px;
-  color: #1a1a1a;
+  color: var(--text-primary);
 }
 
 .form-group {
@@ -342,22 +424,24 @@ header {
   display: block;
   margin-bottom: 8px;
   font-weight: 600;
-  color: #333;
+  color: var(--text-primary);
   font-size: 14px;
 }
 
 .form-group .optional {
   font-weight: 400;
-  color: #999;
+  color: var(--text-muted);
 }
 
 .form-group input {
   width: 100%;
   padding: 14px 16px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--input-border);
   border-radius: 10px;
   font-size: 14px;
-  transition: border-color 0.2s;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  transition: border-color 0.2s, background 0.3s, color 0.3s;
 }
 
 .form-group input:focus {
@@ -376,8 +460,12 @@ header {
 @media (max-width: 640px) {
   header {
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
     align-items: flex-start;
+  }
+
+  .header-actions {
+    width: 100%;
   }
 
   .accounts-grid {

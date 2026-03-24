@@ -20,7 +20,7 @@ class ConfigManager {
     }
     return {
       accounts: [],
-      settings: { refreshInterval: 30, theme: 'light', language: 'zh-CN' }
+      settings: { refreshInterval: 30, theme: 'gradient', language: 'zh-CN' }
     };
   }
 
@@ -35,7 +35,7 @@ class ConfigManager {
           groupId: legacy.groupId,
           isDefault: true
         }],
-        settings: { refreshInterval: 30, theme: 'light', language: 'zh-CN' }
+        settings: { refreshInterval: 30, theme: 'gradient', language: 'zh-CN' }
       };
       fs.writeFileSync(this.configPath, JSON.stringify(newConfig, null, 2));
       console.log('[Config] Migrated legacy config to new format');
