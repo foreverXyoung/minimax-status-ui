@@ -4,6 +4,11 @@ Web Dashboard for monitoring MiniMax Token-Plan usage with multi-account support
 
 ![Dashboard Preview](https://img.shields.io/badge/Node.js-v18+-green) ![License](https://img.shields.io/badge/License-MIT-blue)
 
+## Language
+
+- [English](README.md)
+- [简体中文](README_zh-CN.md)
+
 ## Features
 
 - **Multi-Account Support** - Monitor multiple MiniMax accounts simultaneously
@@ -12,6 +17,9 @@ Web Dashboard for monitoring MiniMax Token-Plan usage with multi-account support
 - **Subscription Status** - Track plan expiry date
 - **Color-coded Status** - Visual indicators for usage levels
 - **Clean Web UI** - Modern, responsive dashboard interface
+- **Refresh Interval** - Configurable auto-refresh (manual, 10s, 30s, 1min, 5min, 10min)
+- **Multi-language** - Support for Simplified Chinese, Traditional Chinese, and English
+- **Theme Selection** - Gradient, Light, Dark, and System theme modes
 
 ## Screenshots
 
@@ -81,7 +89,7 @@ minimax-status-ui/
 | POST | `/api/accounts` | Add new account |
 | DELETE | `/api/accounts/:id` | Delete account |
 | GET | `/api/status/:accountId` | Get account usage status |
-| GET | `/api/settings` | Get settings |
+| GET | `/api/settings` | Get settings (refreshInterval, theme, language) |
 | PUT | `/api/settings` | Update settings |
 
 ## Configuration Files
@@ -101,10 +109,19 @@ Account data is stored in `~/.minimax-accounts.json` with the following structur
   ],
   "settings": {
     "refreshInterval": 30,
-    "theme": "light"
+    "theme": "gradient",
+    "language": "zh-CN"
   }
 }
 ```
+
+### Settings Options
+
+| Setting | Options | Default |
+|---------|---------|---------|
+| refreshInterval | 0 (manual), 10, 30, 60, 300, 600 | 30 |
+| theme | gradient, light, dark, system | gradient |
+| language | zh-CN, zh-TW, en | zh-CN |
 
 ## Usage Display
 
