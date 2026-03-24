@@ -10,47 +10,47 @@ const i18n = {
     title: 'MiniMax Dashboard',
     subtitle: 'Token-Plan Monitor',
     manual: '手动',
-    addAccount: '+ Add Account',
-    refresh: 'Refresh',
-    noAccounts: 'No accounts configured',
-    noAccountsHint: 'Click "Add Account" to add your first MiniMax account',
-    addNewAccount: 'Add New Account',
-    accountName: 'Account Name',
+    addAccount: '+ 添加账号',
+    refresh: '刷新',
+    noAccounts: '暂无配置账号',
+    noAccountsHint: '点击"添加账号"添加您的第一个 MiniMax 账号',
+    addNewAccount: '添加新账号',
+    accountName: '账号名称',
     apiToken: 'API Token',
     groupId: 'Group ID',
-    add: 'Add',
-    cancel: 'Cancel',
-    remaining: 'Remaining',
-    resetIn: 'Reset in',
-    weekly: 'Weekly',
-    expires: 'Expires',
-    usage: 'Usage',
-    default: 'Default',
-    deleteConfirm: 'Delete this account?',
-    lastUpdated: 'Last updated'
+    add: '添加',
+    cancel: '取消',
+    remaining: '剩余次数',
+    resetIn: '重置时间',
+    weekly: '周限额',
+    expires: '到期时间',
+    usage: '使用量',
+    default: '默认',
+    deleteConfirm: '确定删除此账号？',
+    lastUpdated: '最后更新'
   },
   'zh-TW': {
     title: 'MiniMax Dashboard',
     subtitle: 'Token-Plan Monitor',
     manual: '手動',
-    addAccount: '+ Add Account',
-    refresh: 'Refresh',
-    noAccounts: 'No accounts configured',
-    noAccountsHint: 'Click "Add Account" to add your first MiniMax account',
-    addNewAccount: 'Add New Account',
-    accountName: 'Account Name',
+    addAccount: '+ 添加帳號',
+    refresh: '刷新',
+    noAccounts: '暫無配置帳號',
+    noAccountsHint: '點擊"添加帳號"添加您的第一個 MiniMax 帳號',
+    addNewAccount: '添加新帳號',
+    accountName: '帳號名稱',
     apiToken: 'API Token',
     groupId: 'Group ID',
-    add: 'Add',
-    cancel: 'Cancel',
-    remaining: 'Remaining',
-    resetIn: 'Reset in',
-    weekly: 'Weekly',
-    expires: 'Expires',
-    usage: 'Usage',
-    default: 'Default',
-    deleteConfirm: 'Delete this account?',
-    lastUpdated: 'Last updated'
+    add: '添加',
+    cancel: '取消',
+    remaining: '剩餘次數',
+    resetIn: '重置時間',
+    weekly: '週限額',
+    expires: '到期時間',
+    usage: '使用量',
+    default: '默認',
+    deleteConfirm: '確定刪除此帳號？',
+    lastUpdated: '最後更新'
   },
   'en': {
     title: 'MiniMax Dashboard',
@@ -82,14 +82,20 @@ function t(key) {
 }
 
 function applyI18n() {
+  // Update static text elements
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     el.textContent = t(key);
   });
+
+  // Update placeholders
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     const key = el.getAttribute('data-i18n-placeholder');
     el.placeholder = t(key);
   });
+
+  // Update document title
+  document.title = t('title');
 }
 
 async function fetchAccounts() {
@@ -143,8 +149,10 @@ async function refreshAllAccounts() {
   if (accounts.length === 0) {
     grid.innerHTML = '';
     emptyState.classList.remove('hidden');
-    emptyState.querySelector('[data-i18n="noAccounts"]').textContent = t('noAccounts');
-    emptyState.querySelector('[data-i18n="noAccountsHint"]').textContent = t('noAccountsHint');
+    // Update empty state text directly
+    emptyState.querySelector('p').textContent = t('noAccounts');
+    const hint = emptyState.querySelector('.hint');
+    if (hint) hint.textContent = t('noAccountsHint');
     return;
   }
 
@@ -319,6 +327,7 @@ document.getElementById('languageSelect').addEventListener('change', async (e) =
   currentLang = e.target.value;
   await saveSettings({ refreshInterval: parseInt(document.getElementById('refreshIntervalSelect').value, 10), language: currentLang });
   applyI18n();
+  await fetchAccounts();
   await refreshAllAccounts();
 });
 
